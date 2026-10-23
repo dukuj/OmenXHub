@@ -1,0 +1,30 @@
+name: Build OmenXHub
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: 1. 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 2. 配置 .NET 环境
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: 3. 编译软件
+        run: dotnet build -c Release
+
+      - name: 4. 打包上传编译结果
+        uses: actions/upload-artifact@v4
+        with:
+          name: OmenXHub-NewIcon
+          path: |
+            **/bin/Release/**/Omen*.exe
+            **/bin/Release/**/Omen*.dll
